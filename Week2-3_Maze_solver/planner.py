@@ -2,6 +2,17 @@ import argparse
 import numpy as np
 from scipy.optimize import linprog
 
+# write a function to read the MDP file
+# return the following:
+# num_states: number of states in the MDP
+# num_actions: number of actions in the MDP
+# start_state: the start state of the MDP
+# end_states: list of terminal states in the MDP
+# transP: transition probabilities
+# rewards: rewards
+# mdptype: episodic or continuing
+# discount: discount factor
+
 def read_mdp_file(file_path):
     with open(file_path, 'r', encoding='UTF-16') as f:
         lines = f.readlines()
