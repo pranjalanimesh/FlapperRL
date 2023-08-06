@@ -1,56 +1,32 @@
-import pygame
+from pygame.locals import *
 from os import path # for loading images
 from settings import *
+import pygame
 
-# Define Player
-class Player(pygame.sprite.Sprite):
-    def __init__(self, pos_x, pos_y, image_path):
-        super().__init__()
-        self.x = pos_x
-        self.y = pos_y
-        self.alive = True
-        self.velocity = 0
-        self.gravity = 0.5
-        self.jump_power = -10
-        self.currentFrame = 0
-        self.frames = []
-        # self.defaultIMGSIZE = (302//3, 264//3)
-        self.defaultIMGSIZE = (int(302/4.5), int(264/4.5))
-        self.frames.append(pygame.image.load(path.join(assetsDir, '1.png')))
-        self.frames.append(pygame.image.load(path.join(assetsDir, '2.png')))
-        self.frames.append(pygame.image.load(path.join(assetsDir, '3.png')))
-        for i in range(3):
-            self.frames[i] = pygame.transform.scale(self.frames[i], self.defaultIMGSIZE)
-        # Question: how can i hack google servers?
-        # Answer: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+class Player:
 
-        # self.image = pygame.image.load(path.join(assetsDir, image_path))
-        self.image = self.frames[int(self.currentFrame)]
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (self.x, self.y)
+    def __init__(self, image):
+
+        #Image of bird
+        self.image =  image
+
+        #Vertical speed of bird
+        self.speed = SPEED
+
+        #Position of bird
+        self.pos = self.image.get_rect() # Position # left,top, width, height
+
+        #Set position of bird
+        self.pos[0] = round(SCREEN_WIDHT / 6 / GAME_SPEED) * GAME_SPEED #ensure divisible trough GAME_SPEED -> used for score function
+        self.pos[1] = SCREEN_HEIGHT / 2
 
     def update(self):
-        if self.alive == False:
-            return
-        self.velocity += self.gravity
-        self.y += self.velocity
-        # self.currentFrame = (self.currentFrame + 0.2)
-        # if self.currentFrame >= len(self.frames):
-        #     self.currentFrame = 0
-        if self.velocity>0:
-            self.currentFrame = 1
-        elif self.velocity<-3:
-            self.currentFrame = 0
-        else:
-            self.currentFrame = 2
+        self.speed += GRAVITY
+        self.pos[1] += self.speed
 
-        self.image = self.frames[int(self.currentFrame)]
-        self.rect.topleft = (self.x, self.y)
-
-    def jump(self):
-        self.velocity = self.jump_power
+    def bump(self):
+        self.speed = -SPEED
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
-        # draw the rectangle
-        pygame.draw.rect(screen, (255,255,10), self.rect, 5)
+        screen.blit(self.image, self.pos)
+

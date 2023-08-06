@@ -1,18 +1,31 @@
 from settings import *
 import pygame
+from pygame.locals import *
 
-class Pipe(pygame.sprite.Sprite):
-    GAP = 
+class Pipe:
 
-    def __init__(self, pos_x, pos_y):
-        
-        super().__init__()
-        
-        self.x = pos_x
-        self.y = pos_y
-        self.image = pygame.image.load(path.join(assetsDir, image_path))
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (self.x, self.y)
+    def __init__(self, image, inverted, xpos, ysize):
+
+        #Image of pipe
+        self.image = image
+
+        #Position of pipe
+        self.pos = self.image.get_rect()
+
+        #Set pipe position
+        self.inverted = inverted
+        self.pos[0] = xpos
+        if inverted:
+            self.image = pygame.transform.flip(self.image, False, True)
+            self.pos[1] = - (self.pos[3] - ysize)
+        else:
+            self.pos[1] = SCREEN_HEIGHT - ysize
+
+    def update(self):
+        self.pos[0] -= GAME_SPEED
+        # if pos kleiner 1 delete itself
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
+        screen.blit(self.image, self.pos)
+
+    
