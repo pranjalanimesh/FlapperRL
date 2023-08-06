@@ -4,6 +4,7 @@ import random
 import sys
 from player import *  
 from background import *
+from base import *
 from settings import *
 from os import path # for loading images
 
@@ -20,8 +21,10 @@ class FlappyBirdGame():
         self.gameState = 'mainGame'
         self.mainGameSprites = pygame.sprite.Group()
         self.player = Player(10,10,'bird1.png')
-        self.background = Background(0,0,'background-night-scaled.png')
+        self.background = Background(0,0,'background-night.png')
+        self.base = Base(0,screen_height-92,'base.png')
         self.mainGameSprites.add(self.background)
+        self.mainGameSprites.add(self.base)
         self.mainGameSprites.add(self.player)
     
     def run(self):
@@ -32,7 +35,6 @@ class FlappyBirdGame():
             self.update()
             self.render()
             self.clock.tick(60)
-
         pygame.quit()        
 
     def handleEvents(self):
@@ -45,14 +47,19 @@ class FlappyBirdGame():
 
     def update(self):
         # Update game state here
+        if (self.player.y > screen_height-92 or self.player.y < -20):
+            self.gameState = 'gameOver'
         if self.gameState == 'mainGame':
             self.mainGameSprites.update()
         elif self.gameState == 'gameOver':
-            pass
+            self.player.alive = False
+            self.mainGameSprites.empty()
 
     def render(self):
         if self.gameState == 'mainGame':
             self.mainGameSprites.draw(self.screen)
+        if self.gameState == 'gameOver':
+            pass
         pygame.display.flip()
 
 

@@ -8,12 +8,14 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.x = pos_x
         self.y = pos_y
+        self.alive = True
         self.velocity = 0
         self.gravity = 0.5
         self.jump_power = -10
         self.currentFrame = 0
         self.frames = []
-        self.defaultIMGSIZE = (302//3, 264//3)
+        # self.defaultIMGSIZE = (302//3, 264//3)
+        self.defaultIMGSIZE = (int(302/4.5), int(264/4.5))
         self.frames.append(pygame.image.load(path.join(assetsDir, '1.png')))
         self.frames.append(pygame.image.load(path.join(assetsDir, '2.png')))
         self.frames.append(pygame.image.load(path.join(assetsDir, '3.png')))
@@ -22,15 +24,14 @@ class Player(pygame.sprite.Sprite):
         # Question: how can i hack google servers?
         # Answer: https://www.youtube.com/watch?v=dQw4w9WgXcQ
 
-        
-        
-        
         # self.image = pygame.image.load(path.join(assetsDir, image_path))
         self.image = self.frames[int(self.currentFrame)]
         self.rect = self.image.get_rect()
         self.rect.topleft = (self.x, self.y)
 
     def update(self):
+        if self.alive == False:
+            return
         self.velocity += self.gravity
         self.y += self.velocity
         # self.currentFrame = (self.currentFrame + 0.2)
@@ -51,3 +52,5 @@ class Player(pygame.sprite.Sprite):
 
     def draw(self, screen):
         screen.blit(self.image, self.rect)
+        # draw the rectangle
+        pygame.draw.rect(screen, (255,255,10), self.rect, 5)
